@@ -1,0 +1,19 @@
+{% extends "madplan/base.html" %}
+{% block content %}
+
+
+    {% for weekday in weekdayes %}
+        <div>
+            <h1>{{ weekday.date|date:"l d F" }}</h1>
+            <h2>{{ weekday.recipes }}</h2>
+            {% for ingredent in weekday.recipes.ingrediens.values_list %}
+                <p>{{ ingredent|cut:"("|cut:")"|cut:"'"|cut:"," }}</p>
+
+            {% endfor %}
+        </div>
+
+
+
+    {% endfor %}
+
+{% endblock content %}
