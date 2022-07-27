@@ -7,10 +7,7 @@
             <h1>{{ weekday.date|date:"l d F" }}</h1>
             <h2>{{ weekday.recipes }}</h2>
             {% for ingredent in weekday.recipes.ingrediens.values_list %}
-                <div>
-                    <p>{{ ingredent|cut:"("|cut:")"|cut:"'"|cut:"," }}</p>
-                    <p>love</p>
-                </div>
+                <p>{{ ingredent|cut:"("|cut:")"|cut:"'"|cut:"," }}</p>
 
             {% endfor %}
         </div>
