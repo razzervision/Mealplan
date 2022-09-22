@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from madplan.models import Ingredients, Recipes, WeekDays
-from serializers import IngredientsSerializer, RecipesSerializer, WeekdaySerializer
+from api.serializers import IngredientsSerializer, RecipesSerializer, WeekdaySerializer
 
 
 def ingredients_list(request):

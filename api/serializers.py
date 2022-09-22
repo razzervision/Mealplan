@@ -17,4 +17,4 @@ class RecipesSerializer(ModelSerializer):
 class WeekdaySerializer(ModelSerializer):
     class Meta:
         model = WeekDays
-        fields = ['id', 'name', 'date']
+        fields = ['id', 'recipes', 'date']
