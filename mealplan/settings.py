@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'madplan.apps.MadplanConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

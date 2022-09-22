@@ -20,7 +20,7 @@ class Recipes(models.Model):
 
 class WeekDays(models.Model):
     recipes = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    date = models.DateTimeField('%d-%m-%y')
+    date = models.DateField('%y-%m-%d')
 
     def __str__(self):
         return f'{str(self.date)}'
