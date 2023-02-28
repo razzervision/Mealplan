@@ -1,21 +1,30 @@
-from django.http import JsonResponse
-from madplan.models import Ingredients, Recipes, WeekDays
-from api.serializers import IngredientsSerializer, RecipesSerializer, WeekdaySerializer
+from madplan.models import Ingredients, Recipes
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from api.serializers import IngredientSerializer, RecipesSerializer
+from rest_framework.filters import SearchFilter
+from rest_framework.pagination import PageNumberPagination
 
 
-def ingredients_list(request):
-    ingredients = Ingredients.objects.all()
-    serializer = IngredientsSerializer(ingredients, many=True)
-    return JsonResponse(serializer.data, safe=False)
+class RecipesPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page_size'
+    max_page_size = 1000
 
 
-def recipes_list(request):
-    recipe = Recipes.objects.all()
-    serializer = RecipesSerializer(recipe, many=True)
-    return JsonResponse(serializer.data, safe=False)
+class IngredientCreateView(ListCreateAPIView):
+    queryset = Ingredients.objects.all()
+    serializer_class = IngredientSerializer
 
 
-def weekday_list(request):
-    weekday = WeekDays.objects.all()
-    serializer = WeekdaySerializer(weekday, many=True)
-    return JsonResponse(serializer.data, safe=False)
+class RecipesView(ListCreateAPIView):
+    queryset = Recipes.objects.all()
+    serializer_class = RecipesSerializer
+    filter_backends = [SearchFilter]
+    search_fields = ['name', 'description']
+    pagination_class = RecipesPagination
+
+
+class RecipeDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Recipes.objects.all()
+    serializer_class = RecipesSerializer
+    lookup_field = 'pk'
