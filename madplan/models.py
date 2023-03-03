@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Ingredients(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.name
@@ -20,7 +20,7 @@ class Recipes(models.Model):
 
 class WeekDays(models.Model):
     recipes = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    date = models.DateField('%y-%m-%d')
+    date = models.DateField('%d-%m-%y')
 
     def __str__(self):
         return f'{str(self.date)}'
