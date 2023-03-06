@@ -2,12 +2,12 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from .forms import IngredientsForm, RecipesForm, WeekdayForm
-from .models import WeekDays
+from .models import WeekDaysNative
 
 
 def home(request):
     context = {
-        'weekdays': WeekDays.objects.all(),
+        'weekdays': WeekDaysNative.objects.all(),
     }
 
     return render(request, 'madplan/home.html', context)

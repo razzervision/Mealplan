@@ -1,65 +1,71 @@
-from madplan.models import Ingredients, Recipes, WeekDays
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
-from api.serializers import IngredientSerializer, RecipesSerializer, WeekdaysSerializer
-from rest_framework.filters import SearchFilter
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from madplan.models import Ingredient, Recipe, RecipeIngredient, UnitOfMeasurement, RecipeStep, MealPlan, MealPlanRecipe
+from .serializers import IngredientSerializer, RecipeSerializer, RecipeIngredientSerializer, \
+    UnitOfMeasurementSerializer, RecipeStepSerializer, MealPlanSerializer, MealPlanRecipeSerializer, UserSerializer
+from rest_framework import pagination
 
 
-class RecipesPagination(PageNumberPagination):
+class StandardResultsSetPagination(pagination.PageNumberPagination):
     page_size = 10
-    page_query_param = 'page_size'
-    max_page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 
-class IngredientsPagination(PageNumberPagination):
-    page_size = 10
-    page_query_param = 'page_size'
-    max_page_size = 1000
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('username')
+    serializer_class = UserSerializer
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
 
 
-class WeekdaysPagination(PageNumberPagination):
-    page_size = 10
-    page_query_param = 'page_size'
-    max_page_size = 1000
-
-
-class IngredientCreateView(ListCreateAPIView):
-    queryset = Ingredients.objects.all()
+class IngredientViewSet(viewsets.ModelViewSet):
+    queryset = Ingredient.objects.all().order_by('name')
     serializer_class = IngredientSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['name']
-    pagination_class = IngredientsPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
 
 
-class RecipesCreateView(ListCreateAPIView):
-    queryset = Recipes.objects.all()
-    serializer_class = RecipesSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['name', 'description']
-    pagination_class = RecipesPagination
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all().order_by('name')
+    serializer_class = RecipeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
 
 
-class WeekdaysCreateView(ListCreateAPIView):
-    queryset = WeekDays.objects.all()
-    serializer_class = WeekdaysSerializer
-    filter_backends = [SearchFilter]
-    search_fields = ['recipes__name', 'date']
-    pagination_class = WeekdaysPagination
+class RecipeIngredientViewSet(viewsets.ModelViewSet):
+    queryset = RecipeIngredient.objects.all().order_by('recipe')
+    serializer_class = RecipeIngredientSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
 
 
-class RecipeDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = Recipes.objects.all()
-    serializer_class = RecipesSerializer
-    lookup_field = 'pk'
+class UnitOfMeasurementViewSet(viewsets.ModelViewSet):
+    queryset = UnitOfMeasurement.objects.all().order_by('name')
+    serializer_class = UnitOfMeasurementSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
 
 
-class IngredientDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = Ingredients.objects.all()
-    serializer_class = IngredientSerializer
-    lookup_field = 'pk'
+class RecipeStepViewSet(viewsets.ModelViewSet):
+    queryset = RecipeStep.objects.all().order_by('recipe')
+    serializer_class = RecipeStepSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
 
 
-class WeekdayDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = WeekDays.objects.all()
-    serializer_class = WeekdaysSerializer
-    lookup_field = 'pk'
+class MealPlanViewSet(viewsets.ModelViewSet):
+    queryset = MealPlan.objects.all().order_by('name')
+    serializer_class = MealPlanSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
+
+
+class MealPlanRecipeViewSet(viewsets.ModelViewSet):
+    queryset = MealPlanRecipe.objects.all().order_by('recipe')
+    serializer_class = MealPlanRecipeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = StandardResultsSetPagination
